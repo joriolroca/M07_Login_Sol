@@ -1,5 +1,8 @@
 <?php
 
+    // Start the session
+    session_start();
+
     //Declara les variables de connexió a les BBDD
     include "bdConf.php";
 
@@ -23,30 +26,14 @@
             if($res){
                 //controlem les files de la consulta.
                 if( mysqli_num_rows($res) > 0){
-                   foreach($res as $current_user){
-                        if($current_user["rol"] == "professor"){
+                    $usr = mysqli_fetch_array($res);
 
-                            echo "Hola ". $current_user["name"]. ",  ets professor!! <br><br>"; 
-                            echo "La llista d'usuraris de la bases de dades és: <br>";
+                    $_SESSION["loggedIn"] = true;
+                    $_SESSION["name"] = $usr["name"];
+                    $_SESSION["user_id"] = $usr["user_id"];
+                    $_SESSION["rol"] = $usr["rol"];
 
-                            mostrarUsuaris($conn);
-
-                        }
-                        else{
-                            echo "soc un alumne";
-                            ?><br>
-                            <?php
-                            echo "nom: " . $current_user["name"];
-                            ?><br>
-                            <?php
-                            echo "cognom: ". $current_user["surname"];
-                            ?><br>
-                            <?php
-                            echo "email: " . $current_user["email"];
-                            ?><br>
-                            <?php
-                        }
-                   }
+                    header("Location: init.php");
                 }else{
                     //Si el login no és correcte pintem la pantalla del login
                     //i hi afegim el text "Els valors són incorrectes"
@@ -74,17 +61,5 @@
         echo "Error en la connexió: " . mysqli_connect_error();
     }
 
-
-    function mostrarUsuaris($conn){
-        $query = "SELECT * FROM `user`";
-
-        $resultat = mysqli_query($conn, $query);
-
-        foreach($resultat as $usr){
-            echo "nom i cognom: " . $usr["name"] . " " . $usr["surname"];
-            ?>
-            <br>
-            <?php
-        } 
-    }
+    mysqli_close($conn);
 ?>
