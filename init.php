@@ -3,6 +3,7 @@
     // Start the session
     session_start();
 
+    //Controlem les sessions per accedir a la pàgina
     if(isset($_SESSION["loggedIn"])){
         if(!$_SESSION["loggedIn"]){
             header("Location: login.html");
@@ -10,6 +11,14 @@
     }
     else{
         header("Location: login.html");
+    }
+
+    //Controlem les cookies per triar l'idioma segons si ho tenim guardat a la cookie o no
+    if(isset($_COOKIE["lang"])){
+        $idioma = $_COOKIE["lang"];
+    }
+    else{
+        $idioma = "cat";
     }
     
 ?>
@@ -23,13 +32,84 @@
 </head>
 <body>
     <h2>
-        <?php
-            echo "Hola " . $_SESSION["name"] . ", ets un ". $_SESSION["rol"] ;
+    <?php
+            if($idioma == "cat"){
+                echo "Hola " . $_SESSION["name"] . ", ets un ". $_SESSION["rol"] ;
+            }
+            else if($idioma == "es") {
+                echo "Hola " . $_SESSION["name"] . ", eres un ". $_SESSION["rol"] ;
+            }
+            else{
+                echo "Hi " . $_SESSION["name"] . ", you are a ". $_SESSION["rol"] ;
+            }
         ?>
     </h2>
 
+    <?php 
+        
+        if($idioma == "cat"){
+            ?>
+
+            <a href="idioma.php?lang=cat" style="color:red">Cat</a>
+            <a href="idioma.php?lang=es">Es</a>
+            <a href="idioma.php?lang=en">En</a>
+            <a href="delete.php">Eliminar</a>
+
+            <?php
+        }
+        else if($idioma == "es") {
+            ?>
+
+            <a href="idioma.php?lang=cat">Cat</a>
+            <a href="idioma.php?lang=es" style="color:red">Es</a>
+            <a href="idioma.php?lang=en">En</a>
+            <a href="delete.php">Eliminar</a>
+            
+            <?php
+        }
+        else{
+            ?>
+
+            <a href="idioma.php?lang=cat">Cat</a>
+            <a href="idioma.php?lang=es">Es</a>
+            <a href="idioma.php?lang=en" style="color:red">En</a>
+            <a href="delete.php">Delete</a>
+            
+            <?php
+        }
+    ?>
+
+    <br>
+    <br>
+
+    <?php 
+    
+    if($idioma == "cat"){
+        ?>
+
     <a href="mostrarInfo.php?id=<?php echo $_SESSION["user_id"]?>">Mostrar informació</a>
     <a href="desconectar.php">Desconnectar</a>
+
+        <?php
+    }
+    else if($idioma == "es") {
+        ?>
+
+    <a href="mostrarInfo.php?id=<?php echo $_SESSION["user_id"]?>">Mostrar información</a>
+    <a href="desconectar.php">Desconnectar</a>
+        
+        <?php
+    }
+    else{
+        ?>
+
+    <a href="mostrarInfo.php?id=<?php echo $_SESSION["user_id"]?>">Show information</a>
+    <a href="desconectar.php">Disconnect</a>
+        
+        <?php
+    }
+    
+    ?>
 
     <br>
     <br>
@@ -45,8 +125,8 @@
                 ?>
                 <table style="border: 1px solid black">
                     <tr>
-                        <th>Nobre</th>
-                        <th>Apellido</th>
+                        <th>Nom</th>
+                        <th>Cognom</th>
                         <th>Email</th>
                     </tr>
                     <?php 

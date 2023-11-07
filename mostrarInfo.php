@@ -1,19 +1,3 @@
-<?php
-
-    // Start the session
-    session_start();
-
-    if(isset($_SESSION["loggedIn"])){
-        if(!$_SESSION["loggedIn"]){
-            header("Location: login.html");
-        }  
-    }
-    else{
-        header("Location: login.html");
-    }
-    
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +7,39 @@
 </head>
 <body>
 
-    <h1> Informació detallada de l'usuario</h1>
+    <?php
+
+    if(isset($_COOKIE["lang"])){
+        $idioma = $_COOKIE["lang"];
+    }
+    else{
+        $idioma = "cat";
+    }
+
+    if($idioma == "cat"){
+        ?>
+
+            <h1> Informació detallada de l'usuario</h1>
+
+        <?php
+    }
+    else if($idioma == "es") {
+        ?>
+
+            <h1> Información detallada del usuario</h1>
+        
+        <?php
+    }
+    else{
+        ?>
+
+            <h1> Detailed user information</h1>
+        
+        <?php
+    }
+
+    ?>
+
    
     <?php
 
@@ -80,7 +96,29 @@
     ?>
     <br>
 
-    <a href="init.php">TORNAR</a>
-    
+    <?php
+
+    if($idioma == "cat"){
+        ?>
+
+            <a href="init.php">TORNAR</a>
+
+        <?php
+    }
+    else if($idioma == "es") {
+        ?>
+
+            <a href="init.php">VOLVER</a>
+        
+        <?php
+    }
+    else{
+        ?>
+
+            <a href="init.php">BACK</a>
+        
+        <?php
+    }
+    ?>
 </body>
 </html>
